@@ -38,7 +38,7 @@ app.get("/lyrics", async (req, res) => {
   const lyrics =
     (await lyricsFinder(req.query.artist, req.query.track)) ||
     "Sorry, no lyrics found for this track.";
-  res.json({ lyrics, track: req.query.track });
+  res.json({ lyrics, track: req.query.track, artist: req.query.artist });
 });
 
 app.post("/login", (req, res) => {
