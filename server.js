@@ -4,25 +4,25 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const cors = require("cors");
 const lyricsFinder = require("lyrics-finder");
 
-conf = {
-  cors: {
-    origin: function (origin, cb) {
-      // setup a white list
-      let wl = ["https://friendly-heisenberg-3cbe1c.netlify.app"];
+let allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, Content-Length, X-Requested-With"
+  );
 
-      if (wl.indexOf(origin) != -1) {
-        cb(null, true);
-      } else {
-        cb(new Error("invalid origin: " + origin), false);
-      }
-    },
-
-    optionsSuccessStatus: 200,
-  },
+  // intercept OPTIONS method
+  if ("OPTIONS" == req.method) {
+    res.send(200);
+  } else {
+    next();
+  }
 };
 
 const app = express();
-app.use(cors(conf.cors));
+app.use(allowCrossDomain);
+app.use(cors());
 app.use(express.json());
 
 app.post("/refresh", (req, res) => {
