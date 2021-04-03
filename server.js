@@ -5,8 +5,8 @@ const cors = require("cors");
 const lyricsFinder = require("lyrics-finder");
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 app.post("/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken;
