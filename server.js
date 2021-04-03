@@ -4,8 +4,25 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const cors = require("cors");
 const lyricsFinder = require("lyrics-finder");
 
+conf = {
+  cors: {
+    origin: function (origin, cb) {
+      // setup a white list
+      let wl = ["https://friendly-heisenberg-3cbe1c.netlify.app"];
+
+      if (wl.indexOf(origin) != -1) {
+        cb(null, true);
+      } else {
+        cb(new Error("invalid origin: " + origin), false);
+      }
+    },
+
+    optionsSuccessStatus: 200,
+  },
+};
+
 const app = express();
-app.use(cors());
+app.use(cors(conf.cors));
 app.use(express.json());
 
 app.post("/refresh", (req, res) => {
